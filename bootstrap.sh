@@ -2,11 +2,8 @@
 
 set -x
 
-if [[ $(uname --all > /dev/null) == *"Ubuntu"* ]]; then
-  dpkg --list | grep ansible > /dev/null
-  is_ansible_installed=$(echo $?)
-
-  if [[ ! is_ansible_installed ]]; then
+if [[ $(uname --all) == *"Ubuntu"* ]]; then
+  if [[ -z $(dpkg --list | grep ansible) ]]; then
       sudo apt-get update
       sudo apt-get install -y software-properties-common
       sudo apt-add-repository -y ppa:ansible/ansible
@@ -15,7 +12,7 @@ if [[ $(uname --all > /dev/null) == *"Ubuntu"* ]]; then
       ansible --version
   fi
 else
-  if [[ $(uname --all > /dev/null) == *"el7"* ]]; then
+  if [[ $(uname --all) == *"el7"* ]]; then
     sudo yum update
     sudo yum install -y epel-release
     sudo yum install -y ansible
